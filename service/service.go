@@ -38,7 +38,7 @@ func (s *service) Decryption(u *repo.User, text string) (string, error) {
 		}
 	} else if u.Type == repo.DES {
 		if u.Decryption {
-			desDecrypted, _ := decryptDES(key[:8], []byte(text)[des.BlockSize:], iv[:8])
+			desDecrypted, _ := decryptDES(key[:8], []byte(text), iv[:8])
 			return fmt.Sprintf("DES Decrypted (Go): `%s`", string(desDecrypted)), nil
 		} else {
 			return text, nil
