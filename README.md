@@ -90,4 +90,8 @@ With this setup, your Telegram bot `@encryption_robot` should be able to encrypt
 ![web-page](image-1.png)
 
 - Bot: [@encryption_robot](https://t.me/encryption_robot)
-- Website [here](https://realtemirov.github.io/encryption-bsc/)
+- Website [here](http://bmi.realtemirov.uz/)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
