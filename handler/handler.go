@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"strings"
+
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/realtemirov/encryption/repo"
 	"github.com/realtemirov/encryption/service"
@@ -38,8 +40,35 @@ func (h *handler) Messages(m *tg.Message) {
 			tg.NewKeyboardButton("AES"),
 			tg.NewKeyboardButton("DES"),
 		))
-
-	switch m.Text {
+	data := strings.Split(m.Text, " ")
+	switch data[0] {
+	case "/aes_encrypt", "/aes_decrypt", "/des_encrypt", "/des_decrypt":
+		switch data[0] {
+		case "/aes_encrypt":
+			u.Type = repo.AES
+			u.Encryption = true
+			text := strings.TrimPrefix(m.Text, "/aes_encrypt ")
+			text, _ = h.serv.Encryption(&u, text)
+			msg = tg.NewMessage(m.Chat.ID, text)
+		case "/aes_decrypt":
+			u.Type = repo.AES
+			u.Decryption = true
+			text := strings.TrimPrefix(m.Text, "/aes_decrypt ")
+			text, _ = h.serv.Decryption(&u, text)
+			msg = tg.NewMessage(m.Chat.ID, text)
+		case "/des_encrypt":
+			u.Type = repo.DES
+			u.Encryption = true
+			text := strings.TrimPrefix(m.Text, "/des_encrypt ")
+			text, _ = h.serv.Encryption(&u, text)
+			msg = tg.NewMessage(m.Chat.ID, text)
+		case "/des_decrypt":
+			u.Type = repo.DES
+			u.Decryption = true
+			text := strings.TrimPrefix(m.Text, "/des_decrypt ")
+			text, _ = h.serv.Decryption(&u, text)
+			msg = tg.NewMessage(m.Chat.ID, text)
+		}
 	case string(repo.AES), string(repo.DES):
 		u.Type = repo.Type(m.Text)
 		if err := h.db.UpdateUser(u); err != nil {
@@ -69,7 +98,6 @@ func (h *handler) Messages(m *tg.Message) {
 			msg = tg.NewMessage(m.Chat.ID, "Enter the text you want to decrypt.")
 		}
 		msg.ReplyMarkup = tg.NewRemoveKeyboard(true)
-
 	default:
 		var (
 			text = msg.Text

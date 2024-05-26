@@ -41,7 +41,7 @@ func main() {
 	u := tg.NewUpdate(0)
 	u.Timeout = 60
 	updates := bot.GetUpdatesChan(u)
-	
+
 	go func() {
 		for update := range updates {
 			if update.Message == nil {
@@ -50,7 +50,7 @@ func main() {
 			h.Messages(update.Message)
 		}
 	}()
-	if err := r.Run(":8080"); err != nil {
+	if err := r.Run(":8088"); err != nil {
 		panic(err)
 	}
 }
